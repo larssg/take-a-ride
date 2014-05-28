@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <div id="googleMap" style="width:100%;height:400px;"></div>
 
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped event-list">
         <tr>
           <th></th>
           <th>Timestamp</th>
@@ -20,6 +20,10 @@
     </div>
 
     <div class="col-md-6">
+      <input type="text" ng-model="lat">
+      <input type="text" ng-model="lon">
+      <input type="button" class="btn btn-default" value="Add marker" ng-click="addMarker(lat, lon)">
+
       <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ currentEvent.lat }},{{ currentEvent.lon }}&heading={{ currentEvent.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4">
     </div>
   </div>
@@ -27,34 +31,5 @@
 
 <script type="text/javascript">
   var data = <%== @data.to_json %>;
-
-  google.maps.event.addDomListener(window, 'load', initialize);
-
-  function initialize() {
-    var mapProp = {
-      zoom: 8,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
-    var bounds = new google.maps.LatLngBounds();
-
-    data.forEach(function(event, index) {
-      if (event.event == 'PAUSE') {
-        var coords = new google.maps.LatLng(event.lat, event.lon);
-        var marker = new google.maps.Marker({
-          position: coords,
-          map: map
-        });
-
-        google.maps.event.addListener(marker, 'click', function(marker) {
-          markerClicked(index);
-        });
-
-        bounds.extend(marker.position);
-      }
-    });
-
-    map.fitBounds(bounds);
-  }
+  google.maps.event.addDomListener(window, 'load', function() { renderMap() });
 </script>

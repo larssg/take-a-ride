@@ -5,6 +5,12 @@ body {
   margin-top: 60px;
 }
 
+.event-list {
+  td {
+    cursor: pointer;
+  }
+}
+
 tr.current {
   td {
     font-weight: bold;
