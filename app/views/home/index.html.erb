@@ -1,0 +1,7 @@
+<table class="table table-striped">
+  <% @rides.each do |ride| %>
+    <tr>
+      <td><%= link_to ride.created_at, ride %></td>
+    </tr>
+  <% end %>
+</table>
