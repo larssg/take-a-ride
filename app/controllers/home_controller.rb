@@ -7,8 +7,8 @@ class HomeController < ApplicationController
       @data << {
         timestamp: row[0] + ' ' + row[1],
         event: row[2],
-        lon: row[3],
-        lat: row[4]
+        lat: row[3],
+        lon: row[4]
       }
     end
   end

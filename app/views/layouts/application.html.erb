@@ -3,9 +3,12 @@
 <head>
   <title>Take A Ride!</title>
   <%= stylesheet_link_tag '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css' %>
-  <%= javascript_include_tag '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js' %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js' %>
+
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBviXm2EqUDSJosBWW-Io5igTFM59Klma8&sensor=false"></script>
   <%= csrf_meta_tags %>
 </head>
 <body>
