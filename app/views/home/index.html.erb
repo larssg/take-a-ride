@@ -2,7 +2,15 @@
   <div class="row">
     <div class="col-md-6">
       <div id="googleMap" style="width:100%;height:400px;"></div>
+    </div>
 
+    <div class="col-md-6">
+      <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ currentEvent.lat }},{{ currentEvent.lon }}&heading={{ currentEvent.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
       <table class="table table-condensed table-striped event-list">
         <tr>
           <th></th>
@@ -20,11 +28,12 @@
     </div>
 
     <div class="col-md-6">
-      <input type="text" ng-model="lat">
-      <input type="text" ng-model="lon">
-      <input type="button" class="btn btn-default" value="Add marker" ng-click="addMarker(lat, lon)">
-
-      <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ currentEvent.lat }},{{ currentEvent.lon }}&heading={{ currentEvent.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4">
+      <table class="table">
+        <tr ng-repeat="interval in intervals()" ng-click="switchEvent(interval.start)">
+          <td>{{ interval.time | date:'mm:ss' }}</td>
+          <td>{{ interval.type }}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

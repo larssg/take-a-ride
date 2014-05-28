@@ -28,6 +28,32 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
     renderEvent(event)
     map.fitBounds(bounds)
 
+  $scope.intervals = () ->
+    intervals = []
+
+    lastEvent = null
+    for event in $scope.data
+      continue unless event.event == 'START' || event.event == 'RESUME' || event.event == 'PAUSE' || event.event == 'STOP'
+
+      if lastEvent?
+        time = new Date(event.timestamp) - new Date(lastEvent.timestamp)
+
+        type =
+          if event.event == 'RESUME'
+            'PAUSING'
+          else
+            'RIDING'
+
+        intervals.push
+          time: time
+          type: type
+          start: lastEvent
+          stop: event
+
+      lastEvent = event
+
+    intervals
+
   $window.renderMap = () ->
     tickIcon = {
       url: 'http://www.clker.com/cliparts/7/1/a/c/11949857491086788994stock-circle.svg',
