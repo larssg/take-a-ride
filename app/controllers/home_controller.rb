@@ -8,7 +8,8 @@ class HomeController < ApplicationController
         timestamp: row[0] + ' ' + row[1],
         event: row[2],
         lat: row[3],
-        lon: row[4]
+        lon: row[4],
+        heading: row[5]
       }
     end
   end
