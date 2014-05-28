@@ -7,7 +7,7 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
   tickIcon = null
 
   $scope.stops = () ->
-    event for event in $scope.data when event.event == 'PAUSE'
+    event for event in $scope.data when event.event == 'PAUSE' || event.event == 'STOP'
 
   $scope.switchEvent = (event) ->
     $scope.currentEvent = event
@@ -73,7 +73,7 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
     map.fitBounds(bounds);
 
   renderEvent = (event) ->
-    return unless event.event == 'PAUSE' || event.event == 'TICK'
+    return unless event.event == 'START' || event.event == 'STOP' || event.event == 'PAUSE' || event.event == 'TICK'
 
     icon = if event.event == 'TICK' then tickIcon else ''
 
