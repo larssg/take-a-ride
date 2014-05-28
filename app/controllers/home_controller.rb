@@ -2,8 +2,14 @@ require 'csv'
 
 class HomeController < ApplicationController
   def index
+  
+  end
+
+  def show
+    ride = Ride.find(params[:id])
+
     @data = []
-    CSV.foreach(Rails.root.join('data', 'event_data.csv'), headers: true) do |row|
+    CSV.foreach(ride.data, headers: true) do |row|
       @data << {
         timestamp: row[0] + ' ' + row[1],
         event: row[2],
