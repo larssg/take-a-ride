@@ -4,3 +4,9 @@
 body {
   margin-top: 60px;
 }
+
+tr.current {
+  td {
+    font-weight: bold;
+  }
+}

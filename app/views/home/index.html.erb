@@ -1,14 +1,27 @@
-<div class="row">
-  <div class="col-md-6">
-    <div id="googleMap" style="width:100%;height:400px;"></div>
-  </div>
+<div ng-controller="HomeController">
+  <div class="row">
+    <div class="col-md-6">
+      <div id="googleMap" style="width:100%;height:400px;"></div>
 
-  <div class="col-md-6">
-    <% @data.each do |event| %>
-      <% if event[:event] == 'PAUSE' || event[:event] == 'STOP' %>
-        <%= image_tag street_view_image_url(event[:lat], event[:lon], event[:heading]) %>
-      <% end %>
-    <% end %>
+      <table class="table table-condensed table-striped">
+        <tr>
+          <th></th>
+          <th>Timestamp</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+        </tr>
+        <tr ng-repeat="event in stops()" ng-click="switchEvent(event)" ng-class="{ current: currentEvent == event }">
+          <td>{{ $index + 1 }}</td>
+          <td>{{ event.timestamp }}</td>
+          <td>{{ event.lat }}</td>
+          <td>{{ event.lon }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ currentEvent.lat }},{{ currentEvent.lon }}&heading={{ currentEvent.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4">
+    </div>
   </div>
 </div>
 
@@ -26,14 +39,20 @@
 
     var bounds = new google.maps.LatLngBounds();
 
-    data.forEach(function(event) {
-      var coords = new google.maps.LatLng(event.lat, event.lon);
-      var marker = new google.maps.Marker({
-        position: coords,
-        map: map
-      });
+    data.forEach(function(event, index) {
+      if (event.event == 'PAUSE') {
+        var coords = new google.maps.LatLng(event.lat, event.lon);
+        var marker = new google.maps.Marker({
+          position: coords,
+          map: map
+        });
 
-      bounds.extend(marker.position);
+        google.maps.event.addListener(marker, 'click', function(marker) {
+          markerClicked(index);
+        });
+
+        bounds.extend(marker.position);
+      }
     });
 
     map.fitBounds(bounds);
