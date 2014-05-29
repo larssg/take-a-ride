@@ -6,6 +6,20 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
   map = null
   tickIcon = null
 
+  for event in $scope.data
+    event.parsedTimestamp = new Date(event.timestamp)
+
+  $window.updateMapHeight = () ->
+    availableHeight = $(window).height() - 225
+    $('#googleMap').height(availableHeight)
+
+    map.fitBounds(bounds) if map?
+
+  setTimeout($window.updateMapHeight, 0)
+
+  $($window).resize () ->
+    $window.updateMapHeight()
+
   $scope.stops = () ->
     event for event in $scope.data when event.event == 'PAUSE' || event.event == 'STOP'
 
@@ -13,10 +27,6 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
     $scope.currentEvent = event
 
   $scope.currentEvent = $scope.stops()[0]
-
-  $window.markerClicked = (index) ->
-    $scope.$apply () ->
-      $scope.currentEvent = $scope.data[index]
 
   $scope.addMarker = (lat, lon) ->
     event =
@@ -54,6 +64,20 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
 
     intervals
 
+  $scope.startTimestamp = () ->
+    firstEvent = _.find $scope.data, (event) ->
+      event.event == 'START'
+    firstEvent.parsedTimestamp
+
+  $scope.endTimestamp = () ->
+    lastEvent = _.find $scope.data, (event) ->
+      event.event == 'STOP'
+    lastEvent.parsedTimestamp
+
+  $window.markerClicked = (index) ->
+    $scope.$apply () ->
+      $scope.currentEvent = $scope.data[index]
+
   $window.renderMap = () ->
     tickIcon = {
       url: 'http://www.clker.com/cliparts/7/1/a/c/11949857491086788994stock-circle.svg',
@@ -70,10 +94,10 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
     for event in $scope.data
       renderEvent(event)
 
-    map.fitBounds(bounds);
+    map.fitBounds(bounds)
 
   renderEvent = (event) ->
-    return unless event.event == 'START' || event.event == 'STOP' || event.event == 'PAUSE' || event.event == 'TICK'
+    return unless shouldRenderEvent(event.event) || event.event == 'TICK'
 
     icon = if event.event == 'TICK' then tickIcon else ''
 
@@ -88,4 +112,10 @@ app.controller 'HomeController', ['$scope', '$window', ($scope, $window) ->
         markerClicked(index)
 
     bounds.extend marker.position
+
+  $scope.eventsToRender = () ->
+    event for event in data when shouldRenderEvent(event.event)
+
+  shouldRenderEvent = (event) ->
+    event == 'START' || event == 'STOP' || event == 'PAUSE'
 ]

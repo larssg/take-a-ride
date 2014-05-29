@@ -1,39 +1,23 @@
 <div ng-controller="HomeController">
-  <div class="row">
-    <div class="col-md-6">
-      <div id="googleMap" style="width:100%;height:400px;"></div>
-    </div>
-
-    <div class="col-md-6">
-      <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=400x400&location={{ currentEvent.lat }},{{ currentEvent.lon }}&heading={{ currentEvent.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4">
-    </div>
-  </div>
+  <%= image_tag 'logo.png', style: 'margin: 10px' %>
 
   <div class="row">
-    <div class="col-md-6">
-      <table class="table table-condensed table-striped event-list">
-        <tr>
-          <th></th>
-          <th>Timestamp</th>
-          <th>Latitude</th>
-          <th>Longitude</th>
-        </tr>
-        <tr ng-repeat="event in stops()" ng-click="switchEvent(event)" ng-class="{ current: currentEvent == event }">
-          <td>{{ $index + 1 }}</td>
-          <td>{{ event.timestamp }}</td>
-          <td>{{ event.lat }}</td>
-          <td>{{ event.lon }}</td>
-        </tr>
-      </table>
+    <div class="col-md-12">
+      <div id="googleMap" style="width: 100%; height: 100px"></div>
     </div>
 
-    <div class="col-md-6">
-      <table class="table">
-        <tr ng-repeat="interval in intervals()" ng-click="switchEvent(interval.start)">
-          <td>{{ interval.time | date:'mm:ss' }}</td>
-          <td>{{ interval.type }}</td>
-        </tr>
-      </table>
+    <div id="timeline">
+      <div class="col-md-12">
+      </div>
+
+      <div class="col-md-12">
+        <span ng-repeat="event in eventsToRender()" style="float: left; padding-top: 10px; padding-left: 10px;">
+          <img ng-src="http://maps.googleapis.com/maps/api/streetview?size=240x240&location={{ event.lat }},{{ event.lon }}&heading={{ event.heading }}&sensor=false&key=AIzaSyDMbu8xOPNiwE7o12PXfN3Ah6VqN6qNsQ4" height="120" width="120">
+          <div style="width: 120px; text-align: center">
+            {{ event.parsedTimestamp | date:'HH:mm' }}
+          </div>
+        </span>
+      </div>
     </div>
   </div>
 </div>
